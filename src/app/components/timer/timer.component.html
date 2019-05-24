@@ -1,0 +1,7 @@
+<div>
+	{{calculateTimeString()}}
+	<div *ngIf="showButtons">
+		<button *ngIf="endTime === null" (click)="startTimer()">Start Timer</button>
+    <button *ngIf="isIncrementing" (click)="endTimer()">End Timer</button>
+  </div>
+</div>
