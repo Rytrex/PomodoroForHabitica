@@ -1,2 +1,18 @@
-<timer [endsIn]=".25" (end)="sendAlert()"></timer>
-<button (click)="getUserTasks()">Get User Tasks</button>
+<timer [endsIn]=".05" (end)="sendAlert()" (stopTimer)="stopTimer()"></timer>
+
+<form [formGroup]="form" class="pure-form pure-form-stacked">
+    <fieldset>
+        <legend>Settings</legend>
+
+        <label for="habiticaUser">User UID: </label>
+        <input id="habiticaUser" formControlName="user">
+
+        <label for="habiticaKey">API Token: </label>
+        <input id="habiticaKey" formControlName="apiKey">
+
+        <label for="habit">Habit: </label>
+        <select id="habit" formControlName="habitUid">
+            <option *ngFor="let option of userTasks" value="{{option.id}}">{{option.text}}</option>
+        </select>
+    </fieldset>
+</form>

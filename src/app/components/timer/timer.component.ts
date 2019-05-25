@@ -16,8 +16,8 @@ export class TimerComponent {
    */
   @Input() public endsIn = 25
 
-  //TODO: emit event when isIncrementing changes value
   @Output() end: EventEmitter<string> = new EventEmitter()
+  @Output() stopTimer: EventEmitter<string> = new EventEmitter()
 
   public endTime: number;
   public time: { mins: number, secs: number };
@@ -45,6 +45,7 @@ export class TimerComponent {
 
   public endTimer(): void {
     this.resetTimer();
+    this.stopTimer.next();
   }
 
   public updateTimer(): void {
