@@ -4,7 +4,8 @@ import { Subscription, timer } from 'rxjs';
 
 @Component({
   selector: 'timer',
-  templateUrl: './timer.component.html'
+  templateUrl: './timer.component.html',
+  styleUrls: ['./timer.component.css']
 })
 export class TimerComponent {
   /**
@@ -12,17 +13,34 @@ export class TimerComponent {
    */
   @Input() public showButtons = true;
   /**
-   * Timer counts down from this number
+   * Timer counts down from this number of minutes
    */
-  @Input() public endsIn = 25
+  @Input() public endsIn = 25;
+  /**
+   * Allowed time over endsIn amount
+   */
+  @Input() public allowedOvertime = 5;
+  /**
+   * Prevents the timer from starting
+   */
+  @Input() public disabled = false;
 
-  @Output() end: EventEmitter<string> = new EventEmitter()
-  @Output() stopTimer: EventEmitter<string> = new EventEmitter()
+  /**
+   * Emits an event when the timer hits 0
+   */
+  @Output() atZero: EventEmitter<string> = new EventEmitter()
+  /**
+   * Emits an event when the timer is stopped
+   */
+  @Output() stopTimer: EventEmitter<boolean> = new EventEmitter()
 
   public endTime: number;
   public time: { mins: number, secs: number };
   public isIncrementing = false;
+  public isOvertime = false;
   private obsTimer: Subscription;
+  private minutes = 60000;
+  private seconds = 1000;
 
   constructor() { }
 
@@ -37,31 +55,37 @@ export class TimerComponent {
   }
 
   public startTimer(): void {
-    this.endTime = Date.now() + this.endsIn * 60025;
+    if (!this.disabled) {
+    this.endTime = Date.now() + this.endsIn * (this.minutes + 25);
     this.obsTimer = timer(0, 1000).subscribe(() => {
       this.updateTimer()
     });
+    }
   }
 
   public endTimer(): void {
+    this.stopTimer.next(this.isOvertime);
     this.resetTimer();
-    this.stopTimer.next();
   }
 
   public updateTimer(): void {
     let difference = this.endTime - Date.now();
-    this.time.mins = Math.abs(Math.floor(difference / (1000 * 60)));
-    this.time.secs = Math.abs(Math.floor(((difference % (1000 * 60)) / 1000)));
+    this.time.mins = Math.abs(Math.floor(difference / this.minutes));
+    this.time.secs = Math.abs(Math.floor(((difference % this.minutes) / this.seconds)));
 
     // alert user when timer changes to incrementing
     if (this.isIncrementing !== difference < 0) {
-      this.end.next();
+      this.atZero.next();
     }
 
     this.isIncrementing = difference < 0;
     if (this.isIncrementing) {
       // subtract one otherwise it starts counting up at 1:01
       this.time.mins--;
+    }
+
+    if (difference < 0 && Math.abs(difference) > this.allowedOvertime * this.minutes) {
+      this.isOvertime = true;
     }
   }
 
@@ -75,6 +99,7 @@ export class TimerComponent {
     this.endTime = null
     this.time = { mins: null, secs: null }
     this.isIncrementing = false;
+    this.isOvertime = false;
 
     if (this.obsTimer) {
       this.obsTimer.unsubscribe();

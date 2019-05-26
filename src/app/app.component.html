@@ -1,18 +1,27 @@
-<timer [endsIn]=".05" (end)="sendAlert()" (stopTimer)="stopTimer()"></timer>
+<div class="container">
 
-<form [formGroup]="form" class="pure-form pure-form-stacked">
-    <fieldset>
-        <legend>Settings</legend>
+	<div class="row">
+		<div class="six columns">
+			<timer [endsIn]=".05" [allowedOvertime]=".25" [disabled]="!form.valid" (atZero)="sendAlert()" (stopTimer)="stopTimer($event)"></timer>
+		</div>
 
-        <label for="habiticaUser">User UID: </label>
-        <input id="habiticaUser" formControlName="user">
+		<div class="six columns">
+			<form [formGroup]="form" class="pure-form pure-form-stacked">
+				<fieldset>
+					<legend>Settings</legend>
 
-        <label for="habiticaKey">API Token: </label>
-        <input id="habiticaKey" formControlName="apiKey">
+					<label for="habiticaUser">User UID: </label>
+          <input id="habiticaUser" class="u-full-width" formControlName="user" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
 
-        <label for="habit">Habit: </label>
-        <select id="habit" formControlName="habitUid">
-            <option *ngFor="let option of userTasks" value="{{option.id}}">{{option.text}}</option>
-        </select>
-    </fieldset>
-</form>
+          <label for="habiticaKey">API Token: </label>
+          <input id="habiticaKey" class="u-full-width" formControlName="apiKey" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+
+          <label for="habit">Habit: </label>
+          <select id="habit" class="u-full-width" formControlName="habitUid">
+              <option *ngFor="let option of userTasks" value="{{option.id}}">{{option.text}}</option>
+          </select>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+</div>

@@ -13,7 +13,6 @@ export class HabiticaService {
 
   public pomodoroTask(user: string, key: string, taskID: string, withinFiveMinutes: boolean): Observable<any> {
     let url = `${this.apiUrl}/tasks/${taskID}/score/${withinFiveMinutes ? 'up' : 'down'}`
-    console.log(url)
     return this.http.post(url, {}, this.makeHeader(user, key))
   }
 

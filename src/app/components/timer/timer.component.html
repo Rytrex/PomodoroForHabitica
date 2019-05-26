@@ -1,7 +1,7 @@
 <div>
-	{{calculateTimeString()}}
+	<h1 class="{{isOvertime ? 'text-red' : ''}}">{{calculateTimeString()}}</h1>
 	<div *ngIf="showButtons">
-		<button class="pure-button pure-button-primary" *ngIf="endTime === null" (click)="startTimer()">Start Timer</button>
-    <button class="pure-button button-error" *ngIf="isIncrementing" (click)="endTimer()">End Timer</button>
+		<button class="button-primary" *ngIf="endTime === null" (click)="startTimer()">Start Timer</button>
+    <button class="button-primary" *ngIf="isIncrementing" (click)="endTimer()">End Timer</button>
   </div>
 </div>

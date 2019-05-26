@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription, timer } from 'rxjs';
+import { PushNotificationOptions, PushNotificationService } from 'ngx-push-notifications';
+import { ToastrService } from 'ngx-toastr';
+
 import { HabiticaService } from './habitica.service';
 import { CookieService } from 'ngx-cookie-service';
 
@@ -8,7 +11,7 @@ import { CookieService } from 'ngx-cookie-service';
   selector: 'my-app',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [CookieService, HabiticaService]
+  providers: [CookieService, HabiticaService, ToastrService]
 })
 export class AppComponent {
   private form: FormGroup;
@@ -17,26 +20,33 @@ export class AppComponent {
   constructor(
     private cookies: CookieService,
     private formBuilder: FormBuilder,
-    private habitica: HabiticaService
+    private habitica: HabiticaService,
+    private notificationService: PushNotificationService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
+    this.notificationService.requestPermission()
     this.createForm();
     this.setUserValues();
   }
 
   public sendAlert(): void {
-    alert('POMODORO');
+    this.notificationService.create('POMODORO').subscribe();
   }
 
-  public stopTimer(): void {
+  public stopTimer(isOvertime: boolean): void {
     this.habitica.pomodoroTask(
       this.form.get('user').value,
       this.form.get('apiKey').value,
       this.form.get('habitUid').value,
-      true
-    ).subscribe(() => {
-      //Empty subscription to trigger the call
+      !isOvertime
+    ).subscribe(value => {
+      if (value.success) {
+        this.toastr.success('Successfully updated habit.');
+      } else {
+        this.toastr.error('An error has occured.');
+      }
     });
   }
 
@@ -69,7 +79,7 @@ export class AppComponent {
   }
 
   private setUserValues(): void {
-    if (this.cookies.check('user').valueOf()) {
+    if (this.cookies.check('user')) {
       this.form.get('user').patchValue(this.cookies.get('user'));
     }
     if (this.cookies.check('apiKey')) {
