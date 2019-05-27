@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Subscription, timer } from 'rxjs';
 
-
 @Component({
   selector: 'timer',
   templateUrl: './timer.component.html',
@@ -56,8 +55,8 @@ export class TimerComponent {
 
   public startTimer(): void {
     if (!this.disabled) {
-    this.endTime = Date.now() + this.endsIn * (this.minutes + 25);
-    this.obsTimer = timer(0, 1000).subscribe(() => {
+    this.endTime = Date.now() + this.endsIn * this.minutes;
+    this.obsTimer = timer(0, 500).subscribe(() => {
       this.updateTimer()
     });
     }
@@ -92,6 +91,8 @@ export class TimerComponent {
   public calculateTimeString(): string {
     if (this.endTime) {
       return this.time.mins + ':' + (this.time.secs < 10 ? 0 : '') + this.time.secs;
+    } else {
+      return `${this.endsIn}:00`;
     }
   }
 
