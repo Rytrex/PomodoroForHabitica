@@ -14,7 +14,7 @@
     "core-js": "2.6.8",
     "ngx-cookie-service": "2.2.0",
     "ngx-push-notifications": "^7.0.2",
-    "ngx-toastr": "10.0.4",
+    "ngx-toastr": "^10.0.4",
     "rxjs": "6.5.2",
     "zone.js": "0.8.29"
   },
