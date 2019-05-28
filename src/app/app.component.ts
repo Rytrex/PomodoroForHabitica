@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription, timer } from 'rxjs';
 import { PushNotificationOptions, PushNotificationService } from 'ngx-push-notifications';
@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 
 import { HabiticaService } from './habitica.service';
 import { CookieService } from 'ngx-cookie-service';
+import { SettingsComponent } from './settings/settings.component';
 
 @Component({
   selector: 'my-app',
@@ -14,21 +15,17 @@ import { CookieService } from 'ngx-cookie-service';
   providers: [CookieService, HabiticaService, ToastrService]
 })
 export class AppComponent {
-  private form: FormGroup;
-  private userTasks: any[];
+  public settingsOpened = false;
+  @ViewChild('settings') settingsPanel: SettingsComponent;
 
   constructor(
-    private cookies: CookieService,
-    private formBuilder: FormBuilder,
     private habitica: HabiticaService,
     private notificationService: PushNotificationService,
     private toastr: ToastrService
   ) { }
 
   ngOnInit() {
-    this.notificationService.requestPermission()
-    this.createForm();
-    this.setUserValues();
+    this.notificationService.requestPermission();
   }
 
   public sendAlert(): void {
@@ -37,9 +34,9 @@ export class AppComponent {
 
   public stopTimer(isOvertime: boolean): void {
     this.habitica.pomodoroTask(
-      this.form.get('user').value,
-      this.form.get('apiKey').value,
-      this.form.get('habitUid').value,
+      this.settingsPanel.settings.get('user').value,
+      this.settingsPanel.settings.get('apiKey').value,
+      this.settingsPanel.settings.get('habitUid').value,
       !isOvertime
     ).subscribe(value => {
       if (value.success) {
@@ -48,45 +45,5 @@ export class AppComponent {
         this.toastr.error('An error has occured.');
       }
     });
-  }
-
-  private createForm(): void {
-    this.form = this.formBuilder.group({
-      user: ['', Validators.required],
-      apiKey: ['', Validators.required],
-      habitUid: [null, Validators.required]
-    });
-
-    this.form.get('user').valueChanges.subscribe(value => {
-      this.getUserTasks(value, this.form.get('apiKey').value);
-      this.cookies.set('user', value);
-    });
-
-    this.form.get('apiKey').valueChanges.subscribe(value => {
-      this.getUserTasks(this.form.get('user').value, value);
-      this.cookies.set('apiKey', value);
-    });
-
-    this.form.get('habitUid').valueChanges.subscribe(value => {
-      this.cookies.set('habitUid', value);
-    });
-  }
-
-  private getUserTasks(user: string, key: string): void {
-    if (user && key) {
-      this.habitica.getUserTasks(user, key).subscribe(value => this.userTasks = (<any>value).data);
-    }
-  }
-
-  private setUserValues(): void {
-    if (this.cookies.check('user')) {
-      this.form.get('user').patchValue(this.cookies.get('user'));
-    }
-    if (this.cookies.check('apiKey')) {
-      this.form.get('apiKey').patchValue(this.cookies.get('apiKey'));
-    }
-    if (this.cookies.check('habitUid')) {
-      this.form.get('habitUid').patchValue(this.cookies.get('habitUid'));
-    }
   }
 }

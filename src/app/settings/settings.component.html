@@ -1,0 +1,26 @@
+<h3>Settings</h3>
+<div class="settings-container">
+    <mat-form-field>
+        <input matInput [formControl]="settings.get('user')" placeholder="User UID" required>
+        <mat-error *ngIf="settings?.get('user').invalid">User UID is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput [formControl]="settings.get('apiKey')" placeholder="API Token" required>
+        <mat-error *ngIf="settings?.get('apiKey').invalid">API Token is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Habit</mat-label>
+        <mat-select [formControl]="settings.get('habitUid')" required>
+            <mat-option *ngFor="let option of userTasks" [value]="option.id">
+                {{option.text}}
+            </mat-option>
+        </mat-select>
+        <mat-error *ngIf="settings?.get('habitUid').invalid">Habit is required</mat-error>
+    </mat-form-field>
+
+    <mat-divider></mat-divider>
+
+    <p>Other options will go here eventually</p>
+</div>

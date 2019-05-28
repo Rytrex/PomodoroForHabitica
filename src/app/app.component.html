@@ -1,27 +1,14 @@
-<div class="container">
+<mat-drawer-container>
 
-	<div class="row">
-		<div class="six columns">
-			<timer [endsIn]=".05" [allowedOvertime]=".25" [disabled]="!form.valid" (atZero)="sendAlert()" (stopTimer)="stopTimer($event)"></timer>
-		</div>
+	<mat-drawer [opened]="settingsOpened" mode="over" position="end"><settings #settings></settings></mat-drawer>
 
-		<div class="six columns">
-			<form [formGroup]="form" class="pure-form pure-form-stacked">
-				<fieldset>
-					<legend>Settings</legend>
+	<mat-drawer-content>
+		<timer [endsIn]=".05" [allowedOvertime]=".25" [disabled]="!settingsPanel?.settings.valid" (atZero)="sendAlert()"
+			(stopTimer)="stopTimer($event)"></timer>
 
-					<label for="habiticaUser">User UID: </label>
-          <input id="habiticaUser" class="u-full-width" formControlName="user" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+			<!-- move settings button elsewhere later -->
+			<button mat-raised-button color="primary" (click)="settingsOpened = true">Settings</button>
 
-          <label for="habiticaKey">API Token: </label>
-          <input id="habiticaKey" class="u-full-width" formControlName="apiKey" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+	</mat-drawer-content>
 
-          <label for="habit">Habit: </label>
-          <select id="habit" class="u-full-width" formControlName="habitUid">
-              <option *ngFor="let option of userTasks" value="{{option.id}}">{{option.text}}</option>
-          </select>
-        </fieldset>
-      </form>
-    </div>
-  </div>
-</div>
+</mat-drawer-container>

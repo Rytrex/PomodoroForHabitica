@@ -1,0 +1,17 @@
+.settings-container {
+  display: flex;
+  flex-direction: column;
+  margin: 15px;
+  width: 400px;
+
+  & > * {
+    width: 100%;
+  }
+}
+
+  h3 {
+      margin: 0;
+      padding: 15px;
+      width: 400px;
+      background-color: lightgrey;
+  }
