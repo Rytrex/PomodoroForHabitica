@@ -7,7 +7,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { SettingsComponent } from './settings/settings.component';
 
 @Component({
-  selector: 'my-app',
+  selector: 'pomodoro-habitica',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   providers: [CookieService, HabiticaService, ToastrService]

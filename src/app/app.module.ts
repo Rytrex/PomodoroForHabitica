@@ -24,6 +24,8 @@ import { ToastrModule } from 'ngx-toastr';
 import { AppComponent } from './app.component';
 import { TimerModule } from './components/timer/timer.module';
 import { SettingsComponent } from './settings/settings.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 // #endregion
 // #endregion
 
@@ -42,7 +44,8 @@ import { SettingsComponent } from './settings/settings.component';
     MatSidenavModule,
     ReactiveFormsModule,
     TimerModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   declarations: [
     AppComponent,

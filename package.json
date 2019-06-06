@@ -1,5 +1,5 @@
 {
-  "name": "angular",
+  "name": "pomodoro-habitica",
   "version": "0.0.0",
   "private": true,
   "dependencies": {
@@ -12,7 +12,9 @@
     "@angular/material": "^7.3.7",
     "@angular/platform-browser": "7.2.15",
     "@angular/platform-browser-dynamic": "7.2.15",
+    "@angular/pwa": "^0.800.1",
     "@angular/router": "7.2.15",
+    "@angular/service-worker": "7.2.15",
     "core-js": "2.6.8",
     "ngx-cookie-service": "2.2.0",
     "ngx-push-notifications": "^7.0.2",

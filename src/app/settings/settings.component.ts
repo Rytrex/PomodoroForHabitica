@@ -13,7 +13,7 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class SettingsComponent {
   public settings: FormGroup;
-  private userTasks: any[];
+  public userTasks: any[];
 
   constructor(
     private cookies: CookieService,
