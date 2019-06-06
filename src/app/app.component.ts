@@ -1,7 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Subscription, timer } from 'rxjs';
-import { PushNotificationOptions, PushNotificationService } from 'ngx-push-notifications';
+import { PushNotificationService } from 'ngx-push-notifications';
 import { ToastrService } from 'ngx-toastr';
 
 import { HabiticaService } from './habitica.service';

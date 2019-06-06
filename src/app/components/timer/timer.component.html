@@ -1,7 +1,6 @@
 <div>
 	<h1 class="{{isOvertime ? 'text-red' : ''}}">{{calculateTimeString()}}</h1>
-	<div *ngIf="showButtons">
-		<button mat-raised-button color="primary" *ngIf="endTime === null" (click)="startTimer()">Start Timer</button>
-    <button mat-raised-button color="accent" *ngIf="isIncrementing" (click)="endTimer()">End Timer</button>
-  </div>
+	<button mat-raised-button color="primary" *ngIf="status < 2" (click)="startTimer()">{{ status === 0 ? 'Start': 'Resume' }}</button>
+	<button mat-raised-button color="primary" *ngIf="status === 2" (click)="stopTimer(1)">Pause</button>
+	<button mat-raised-button color="primary" *ngIf="status > 0" (click)="resetTimer()">Reset</button>
 </div>

@@ -4,21 +4,13 @@ import { Subscription, timer } from 'rxjs';
 @Component({
   selector: 'timer',
   templateUrl: './timer.component.html',
-  styleUrls: ['./timer.component.css']
+  styleUrls: ['./timer.component.scss']
 })
 export class TimerComponent {
   /**
-   * Show start and end buttons
-   */
-  @Input() public showButtons = true;
-  /**
    * Timer counts down from this number of minutes
    */
-  @Input() public endsIn = 25;
-  /**
-   * Allowed time over endsIn amount
-   */
-  @Input() public allowedOvertime = 5;
+  @Input() public endsIn;
   /**
    * Prevents the timer from starting
    */
@@ -28,18 +20,16 @@ export class TimerComponent {
    * Emits an event when the timer hits 0
    */
   @Output() atZero: EventEmitter<string> = new EventEmitter()
-  /**
-   * Emits an event when the timer is stopped
-   */
-  @Output() stopTimer: EventEmitter<boolean> = new EventEmitter()
 
-  public endTime: number;
-  public time: { mins: number, secs: number };
-  public isIncrementing = false;
-  public isOvertime = false;
+  public timeLeft: { mins: number, secs: number };
+  /** 
+   * 0 = Not Started
+   * 1 = Paused
+   * 2 = Running
+   * 3 = Ended
+   */
+  public status = 0;
   private obsTimer: Subscription;
-  private minutes = 60000;
-  private seconds = 1000;
 
   constructor() { }
 
@@ -55,55 +45,43 @@ export class TimerComponent {
 
   public startTimer(): void {
     if (!this.disabled) {
-    this.endTime = Date.now() + this.endsIn * this.minutes;
-    this.obsTimer = timer(0, 500).subscribe(() => {
-      this.updateTimer()
-    });
+      this.runClock();
     }
   }
 
-  public endTimer(): void {
-    this.stopTimer.next(this.isOvertime);
-    this.resetTimer();
-  }
-
-  public updateTimer(): void {
-    let difference = this.endTime - Date.now();
-    this.time.mins = Math.abs(Math.floor(difference / this.minutes));
-    this.time.secs = Math.abs(Math.floor(((difference % this.minutes) / this.seconds)));
-
-    // alert user when timer changes to incrementing
-    if (this.isIncrementing !== difference < 0) {
-      this.atZero.next();
-    }
-
-    this.isIncrementing = difference < 0;
-    if (this.isIncrementing) {
-      // subtract one otherwise it starts counting up at 1:01
-      this.time.mins--;
-    }
-
-    if (difference < 0 && Math.abs(difference) > this.allowedOvertime * this.minutes) {
-      this.isOvertime = true;
-    }
-  }
-
-  public calculateTimeString(): string {
-    if (this.endTime) {
-      return this.time.mins + ':' + (this.time.secs < 10 ? 0 : '') + this.time.secs;
-    } else {
-      return `${this.endsIn}:00`;
-    }
-  }
-
-  private resetTimer(): void {
-    this.endTime = null
-    this.time = { mins: null, secs: null }
-    this.isIncrementing = false;
-    this.isOvertime = false;
-
+  public stopTimer(status: number): void {
+    this.status = status;
     if (this.obsTimer) {
       this.obsTimer.unsubscribe();
     }
+  }
+
+  public resetTimer(): void {
+    this.timeLeft = { mins: this.endsIn, secs: 0 };
+    this.stopTimer(0);
+  }
+
+  public calculateTimeString(): string {
+    if (this.timeLeft) {
+      return this.timeLeft.mins + ':' + (this.timeLeft.secs < 10 ? 0 : '') + this.timeLeft.secs;
+    } else {
+      return '';
+    }
+  }
+
+  private runClock(): void {
+    this.status = 2;
+    this.obsTimer = timer(0, 1000).subscribe(() => {
+      this.timeLeft.secs--;
+      if (this.timeLeft.secs < 0) {
+        this.timeLeft.mins--;
+        this.timeLeft.secs = 59;
+      }
+
+      if (this.timeLeft.mins === 0 && this.timeLeft.secs === 0) {
+        this.atZero.next();
+        this.stopTimer(3);
+      }
+    });
   }
 }

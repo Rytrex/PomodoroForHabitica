@@ -1,14 +1,14 @@
 <mat-drawer-container>
 
-	<mat-drawer [opened]="settingsOpened" mode="over" position="end"><settings #settings></settings></mat-drawer>
+	<mat-drawer [opened]="settingsOpened" mode="over" position="end">
+		<settings #settings></settings>
+	</mat-drawer>
 
 	<mat-drawer-content>
-		<timer [endsIn]=".05" [allowedOvertime]=".25" [disabled]="!settingsPanel?.settings.valid" (atZero)="sendAlert()"
-			(stopTimer)="stopTimer($event)"></timer>
+		<timer [endsIn]="1" [disabled]="!settingsPanel?.settings.valid" (atZero)="sendAlert()"></timer>
 
-			<!-- move settings button elsewhere later -->
-			<button mat-raised-button color="primary" (click)="settingsOpened = true">Settings</button>
-
+		<!-- move settings button elsewhere later -->
+		<button mat-raised-button color="primary" (click)="settingsOpened = true">Settings</button>
 	</mat-drawer-content>
 
 </mat-drawer-container>
