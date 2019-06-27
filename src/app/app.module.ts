@@ -8,11 +8,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // material imports
 import { MatButtonModule } from '@angular/material';
 import { MatCardModule } from '@angular/material/card';
-import {MatDividerModule} from '@angular/material/divider';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTabsModule } from '@angular/material/tabs';
 // #endregion
 
 // #region other imports
@@ -42,6 +43,7 @@ import { environment } from '../environments/environment';
     MatInputModule,
     MatSelectModule,
     MatSidenavModule,
+    MatTabsModule,
     ReactiveFormsModule,
     TimerModule,
     ToastrModule.forRoot(),

@@ -1,6 +1,16 @@
+<<<<<<< HEAD
 <div>
 	<h1>{{calculateTimeString()}}</h1>
 	<button mat-raised-button color="primary" *ngIf="status < 2" (click)="startTimer()">{{ status === 0 ? 'Start': 'Resume' }}</button>
 	<button mat-raised-button color="primary" *ngIf="status === 2" (click)="stopTimer(1)">Pause</button>
 	<button mat-raised-button color="primary" *ngIf="status > 0" (click)="resetTimer()">Reset</button>
+=======
+<div class="timer">
+	<div class="time">{{calculateTimeString()}}</div>
+	<div class="button-bar">
+		<button mat-raised-button color="primary" *ngIf="status < 2" (click)="startTimer()">{{ status === 0 ? 'Start': 'Resume' }}</button>
+		<button mat-raised-button color="primary" *ngIf="status === 2" (click)="stopTimer(1)">Pause</button>
+		<button mat-raised-button color="primary" *ngIf="status > 0" (click)="resetTimer()">Reset</button>
+	</div>
+>>>>>>> separated into 3 timers and changed timer size
 </div>

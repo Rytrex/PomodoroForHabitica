@@ -1,11 +1,21 @@
 <mat-drawer-container>
 
-	<mat-drawer [opened]="settingsOpened" mode="over" position="end">
+	<mat-drawer [(opened)]="settingsOpened" mode="over" position="end">
 		<settings #settings></settings>
 	</mat-drawer>
 
 	<mat-drawer-content>
-		<timer [endsIn]="1" [disabled]="!settingsPanel?.settings.valid" (atZero)="sendAlert()"></timer>
+		<mat-tab-group mat-stretch-tabs>
+			<mat-tab label="Pomodoro">
+				<timer [endsIn]="25" (atZero)="sendAlert()"></timer>
+			</mat-tab>
+			<mat-tab label="Short Break">
+				<timer [endsIn]="5" (atZero)="sendAlert()"></timer>
+			</mat-tab>
+			<mat-tab label="Long Break">
+				<timer [endsIn]="15" (atZero)="sendAlert()"></timer>
+			</mat-tab>
+		</mat-tab-group>
 
 		<!-- move settings button elsewhere later -->
 		<button mat-raised-button color="primary" (click)="settingsOpened = true">Settings</button>

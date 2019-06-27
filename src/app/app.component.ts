@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { PushNotificationService } from 'ngx-push-notifications';
 import { ToastrService } from 'ngx-toastr';
 
@@ -9,8 +9,9 @@ import { SettingsComponent } from './settings/settings.component';
 @Component({
   selector: 'pomodoro-habitica',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
-  providers: [CookieService, HabiticaService, ToastrService]
+  styleUrls: ['./app.component.scss'],
+  providers: [CookieService, HabiticaService, ToastrService],
+  encapsulation: ViewEncapsulation.None
 })
 export class AppComponent {
   public settingsOpened = false;
