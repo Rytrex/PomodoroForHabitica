@@ -15,6 +15,8 @@ export class SettingsComponent {
   public settings: FormGroup;
   public userTasks: any[];
 
+  private fields = ['user', 'apiKey', 'habitUid', 'rememberMe'];
+  
   constructor(
     private cookies: CookieService,
     private formBuilder: FormBuilder,
@@ -30,22 +32,28 @@ export class SettingsComponent {
     this.settings = this.formBuilder.group({
       user: ['', Validators.required],
       apiKey: ['', Validators.required],
-      habitUid: [null, Validators.required]
+      habitUid: [null, Validators.required],
+      rememberMe: [false]
     });
 
     this.settings.get('user').valueChanges.subscribe(value => {
       this.getUserTasks(value, this.settings.get('apiKey').value);
-      this.cookies.set('user', value);
+      this.cookies.set('user', value, this.nextMonthDate);
     });
 
     this.settings.get('apiKey').valueChanges.subscribe(value => {
       this.getUserTasks(this.settings.get('user').value, value);
-      this.cookies.set('apiKey', value);
+      this.updateApiKeyCookie();
     });
 
     this.settings.get('habitUid').valueChanges.subscribe(value => {
-      this.cookies.set('habitUid', value);
+      this.cookies.set('habitUid', value, this.nextMonthDate);
     });
+
+    this.settings.get('rememberMe').valueChanges.subscribe(value => {
+      this.cookies.set('rememberMe', value, this.nextMonthDate);
+      this.updateApiKeyCookie();
+    })
   }
 
   private getUserTasks(user: string, key: string): void {
@@ -55,14 +63,25 @@ export class SettingsComponent {
   }
 
   private setUserValues(): void {
-    if (this.cookies.check('user')) {
-      this.settings.get('user').patchValue(this.cookies.get('user'));
+    this.fields.forEach(field => {
+      if (this.cookies.check(field)) {
+        this.settings.get(field).patchValue(this.cookies.get(field));
+      }
+    })
+  }
+
+  private updateApiKeyCookie(): void {
+    if (this.settings.get('rememberMe').value) {
+      console.log('stored')
+      this.cookies.set('apiKey', this.settings.get('apiKey').value, this.nextMonthDate);
+    } else {
+      console.log('deleted')
+      this.cookies.delete('apiKey');
     }
-    if (this.cookies.check('apiKey')) {
-      this.settings.get('apiKey').patchValue(this.cookies.get('apiKey'));
-    }
-    if (this.cookies.check('habitUid')) {
-      this.settings.get('habitUid').patchValue(this.cookies.get('habitUid'));
-    }
+  }
+
+  private get nextMonthDate(): Date {
+    let today = new Date();
+    return new Date(today.getFullYear(), today.getMonth() + 1, today.getDay());
   }
 }

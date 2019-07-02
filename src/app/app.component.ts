@@ -31,18 +31,20 @@ export class AppComponent {
     this.notificationService.create('POMODORO').subscribe();
   }
 
-  public stopTimer(isOvertime: boolean): void {
-    this.habitica.pomodoroTask(
-      this.settingsPanel.settings.get('user').value,
-      this.settingsPanel.settings.get('apiKey').value,
-      this.settingsPanel.settings.get('habitUid').value,
-      !isOvertime
-    ).subscribe(value => {
-      if (value.success) {
-        this.toastr.success('Successfully updated habit.');
-      } else {
-        this.toastr.error('An error has occured.');
-      }
-    });
+  public timeIsUp(submitToHabitica: boolean): void {
+    if (submitToHabitica) {
+      this.habitica.pomodoroTask(
+        this.settingsPanel.settings.get('user').value,
+        this.settingsPanel.settings.get('apiKey').value,
+        this.settingsPanel.settings.get('habitUid').value,
+        false
+      ).subscribe(value => {
+        if (value.success) {
+          this.toastr.success('Successfully updated habit.');
+        } else {
+          this.toastr.error('An error has occured.');
+        }
+      });
+    }
   }
 }

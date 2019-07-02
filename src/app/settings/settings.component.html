@@ -10,6 +10,8 @@
         <mat-error *ngIf="settings?.get('apiKey').invalid">API Token is required</mat-error>
     </mat-form-field>
 
+    <mat-checkbox [formControl]="settings.get('rememberMe')">Remember Me</mat-checkbox>
+
     <mat-form-field>
         <mat-label>Habit</mat-label>
         <mat-select [formControl]="settings.get('habitUid')" required>
