@@ -36,8 +36,7 @@ export class AppComponent {
       this.habitica.pomodoroTask(
         this.settingsPanel.settings.get('user').value,
         this.settingsPanel.settings.get('apiKey').value,
-        this.settingsPanel.settings.get('habitUid').value,
-        false
+        this.settingsPanel.settings.get('habitUid').value
       ).subscribe(value => {
         if (value.success) {
           this.toastr.success('Successfully updated habit.');

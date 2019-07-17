@@ -72,10 +72,8 @@ export class SettingsComponent {
 
   private updateApiKeyCookie(): void {
     if (this.settings.get('rememberMe').value) {
-      console.log('stored')
       this.cookies.set('apiKey', this.settings.get('apiKey').value, this.nextMonthDate);
     } else {
-      console.log('deleted')
       this.cookies.delete('apiKey');
     }
   }
